@@ -1,63 +1,97 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+export default function App() {
+  const [name, setName] = useState<string>('');
+  const [age, setAge] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [weight, setWeight] = useState<number>(0);
+  const [result, setResult] = useState<string>('');
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+  const calculateBMI = () => {
+    const bmi = weight / (height * height);
+
+    let status = '';
+
+    if (bmi < 18.5) {
+      status = 'Underweight';
+    } else if (bmi < 25) {
+      status = 'Healthy Weight';
+    } else if (bmi < 30) {
+      status = 'Overweight';
+    } else {
+      status = 'Obese';
+    }
+
+    setResult(
+      `Name: ${name}\n` +
+      `Age: ${age}\n` +
+      `Height: ${height}\n` +
+      `Weight: ${weight}\n` +
+      `BMI: ${bmi.toFixed(2)}\n` +
+      `Status: ${status}`
     );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  };
+
+  const clearAll = () => {
+    setName('');
+    setAge(0);
+    setHeight(0);
+    setWeight(0);
+    setResult('');
+  };
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <View style={styles.container}>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your name"
+        value={name}
+        onChangeText={setName}
+      />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your age"
+        value={age === 0 ? '' : String(age)}
+        onChangeText={(text) => setAge(Number(text))}
+        keyboardType="numeric"
+      />
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your Height"
+        value={height === 0 ? '' : String(height)}
+        onChangeText={(text) => setHeight(Number(text))}
+        keyboardType="decimal-pad"
+      />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your weight"
+        value={weight === 0 ? '' : String(weight)}
+        onChangeText={(text) => setWeight(Number(text))}
+        keyboardType="decimal-pad"
+      />
+
+      {/* Buttons back to the original layout */}
+      <Button
+        title="Clear"
+        onPress={clearAll}
+      />
+
+      <Button
+        title="Calculate"
+        onPress={calculateBMI}
+      />
+
+      {/* Results */}
+      <View style={styles.resultRow}>
+        <Text style={styles.resultText}>{result}</Text>
+      </View>
+
+    </View>
   );
 }
 
@@ -65,34 +99,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'row',
+    padding: 100,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 20,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+
+  resultRow: {
+    marginTop: 25,
   },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  resultText: {
+    fontSize: 16,
+    lineHeight: 24,
   },
 });
