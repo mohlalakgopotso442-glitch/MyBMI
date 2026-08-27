@@ -1,122 +1,154 @@
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+    Alert,
+    Button,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 
 export default function App() {
-  const [name, setName] = useState<string>('');
-  const [age, setAge] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
-  const [weight, setWeight] = useState<number>(0);
-  const [result, setResult] = useState<string>('');
+    const [name, setName] = useState('');
+    const [age, setAge] = useState('');
+    const [height, setHeight] = useState('');
+    const [weight, setWeight] = useState('');
+    const [result, setResult] = useState('');
 
-  const calculateBMI = () => {
-    const bmi = weight / (height * height);
+    const calculateBMI = () => {
+        const heightNumber = Number(height);
+        const weightNumber = Number(weight);
 
-    let status = '';
+        if (!name || !age || !height || !weight) {
+            Alert.alert('Missing Information', 'Please enter all your details.');
+            return;
+        }
 
-    if (bmi < 18.5) {
-      status = 'Underweight';
-    } else if (bmi < 25) {
-      status = 'Healthy Weight';
-    } else if (bmi < 30) {
-      status = 'Overweight';
-    } else {
-      status = 'Obese';
-    }
+        if (heightNumber <= 0 || weightNumber <= 0) {
+            Alert.alert('Invalid Information', 'Please enter valid height and weight.');
+            return;
+        }
 
-    setResult(
-      `Name: ${name}\n` +
-      `Age: ${age}\n` +
-      `Height: ${height}\n` +
-      `Weight: ${weight}\n` +
-      `BMI: ${bmi.toFixed(2)}\n` +
-      `Status: ${status}`
+        const heightInMetres = heightNumber / 100;
+        const bmi = weightNumber / (heightInMetres * heightInMetres);
+
+        let category = '';
+
+        if (bmi < 18.5) {
+            category = 'Underweight';
+        } else if (bmi < 25) {
+            category = 'Normal weight';
+        } else if (bmi < 30) {
+            category = 'Overweight';
+        } else {
+            category = 'Obese';
+        }
+
+        setResult(`Your BMI is ${bmi.toFixed(1)} - ${category}`);
+    };
+
+    const clearAll = () => {
+        setName('');
+        setAge('');
+        setHeight('');
+        setWeight('');
+        setResult('');
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>MyBMI</Text>
+
+            <Text style={styles.subtitle}>
+                Calculate your Body Mass Index
+            </Text>
+
+            <TextInput
+                style={styles.input}
+                placeholder="Enter your name"
+                value={name}
+                onChangeText={setName}
+            />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Enter your age"
+                value={age}
+                onChangeText={setAge}
+                keyboardType="numeric"
+            />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Enter your height in cm"
+                value={height}
+                onChangeText={setHeight}
+                keyboardType="decimal-pad"
+            />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Enter your weight in kg"
+                value={weight}
+                onChangeText={setWeight}
+                keyboardType="decimal-pad"
+            />
+
+            <View style={styles.button}>
+                <Button title="CALCULATE" onPress={calculateBMI} />
+            </View>
+
+            <View style={styles.button}>
+                <Button title="CLEAR" onPress={clearAll} />
+            </View>
+
+            {result !== '' && (
+                <Text style={styles.result}>{result}</Text>
+            )}
+        </View>
     );
-  };
-
-  const clearAll = () => {
-    setName('');
-    setAge(0);
-    setHeight(0);
-    setWeight(0);
-    setResult('');
-  };
-
-  return (
-    <View style={styles.container}>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your name"
-        value={name}
-        onChangeText={setName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your age"
-        value={age === 0 ? '' : String(age)}
-        onChangeText={(text) => setAge(Number(text))}
-        keyboardType="numeric"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your Height"
-        value={height === 0 ? '' : String(height)}
-        onChangeText={(text) => setHeight(Number(text))}
-        keyboardType="decimal-pad"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your weight"
-        value={weight === 0 ? '' : String(weight)}
-        onChangeText={(text) => setWeight(Number(text))}
-        keyboardType="decimal-pad"
-      />
-
-      {/* Buttons back to the original layout */}
-      <Button
-        title="Clear"
-        onPress={clearAll}
-      />
-
-      <Button
-        title="Calculate"
-        onPress={calculateBMI}
-      />
-
-      {/* Results */}
-      <View style={styles.resultRow}>
-        <Text style={styles.resultText}>{result}</Text>
-      </View>
-
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 100,
-  },
+    container: {
+        flex: 1,
+        padding: 25,
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
+    },
 
-  input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-  },
+    title: {
+        fontSize: 36,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 10,
+    },
 
-  resultRow: {
-    marginTop: 25,
-  },
+    subtitle: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginBottom: 25,
+    },
 
-  resultText: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
+    input: {
+        height: 50,
+        borderWidth: 1,
+        borderColor: '#999999',
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        marginBottom: 15,
+        fontSize: 16,
+    },
+
+    button: {
+        marginTop: 8,
+        marginBottom: 8,
+    },
+
+    result: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 25,
+    },
 });

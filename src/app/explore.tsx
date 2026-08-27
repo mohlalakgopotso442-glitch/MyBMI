@@ -1,180 +1,204 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+} from 'react-native';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
-
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
-  };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
-
+export default function LearnScreen() {
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <ScrollView style={styles.container}>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+      <Text style={styles.title}>Healthy Living</Text>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+      <Text style={styles.intro}>
+        Living a healthy lifestyle means taking care of your
+        body and mind. Healthy eating, regular exercise,
+        enough water and good sleep can help you stay healthy.
+      </Text>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+      {/* Healthy Eating */}
+      <View style={styles.card}>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061',
+          }}
+          style={styles.image}
+        />
 
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <Text style={styles.heading}>
+          Healthy Eating
+        </Text>
 
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
+        <Text style={styles.text}>
+          Eating healthy foods gives your body the nutrients
+          it needs. Try to eat fruits, vegetables, whole grains
+          and healthy sources of protein. Limit foods that are
+          high in sugar, salt and unhealthy fats.
+        </Text>
+
+      </View>
+
+      {/* Exercise */}
+      <View style={styles.card}>
+
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438',
+          }}
+          style={styles.image}
+        />
+
+        <Text style={styles.heading}>
+          Stay Active
+        </Text>
+
+        <Text style={styles.text}>
+          Regular physical activity helps keep your body
+          strong and healthy. Walking, running, dancing,
+          cycling and exercising are good ways to stay active.
+        </Text>
+
+      </View>
+
+      {/* Water */}
+      <View style={styles.card}>
+
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d',
+          }}
+          style={styles.image}
+        />
+
+        <Text style={styles.heading}>
+          Drink Enough Water
+        </Text>
+
+        <Text style={styles.text}>
+          Water helps your body function properly and keeps
+          you hydrated. Drink water regularly throughout the
+          day, especially when you are exercising or when it
+          is hot.
+        </Text>
+
+      </View>
+
+      {/* Sleep */}
+      <View style={styles.card}>
+
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1511295742362-92c96b1cf484',
+          }}
+          style={styles.image}
+        />
+
+        <Text style={styles.heading}>
+          Get Enough Sleep
+        </Text>
+
+        <Text style={styles.text}>
+          Good sleep helps your body and mind rest and recover.
+          Try to follow a regular sleeping routine and get
+          enough sleep each night.
+        </Text>
+
+      </View>
+
+      {/* Mental Health */}
+      <View style={styles.card}>
+
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773',
+          }}
+          style={styles.image}
+        />
+
+        <Text style={styles.heading}>
+          Take Care of Your Mental Health
+        </Text>
+
+        <Text style={styles.text}>
+          Mental health is an important part of healthy living.
+          Take time to relax, do activities that you enjoy and
+          spend time with people who make you feel supported.
+        </Text>
+
+      </View>
+
+      {/* BMI Information */}
+      <View style={styles.infoBox}>
+
+        <Text style={styles.heading}>
+          Understanding BMI
+        </Text>
+
+        <Text style={styles.text}>
+          BMI stands for Body Mass Index. It uses a person's
+          height and weight to calculate a number that can help
+          indicate their weight category. Use the MyBMI page
+          to calculate your BMI.
+        </Text>
+
+      </View>
+
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
   container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
+    flex: 1,
+    padding: 20,
   },
-  titleContainer: {
-    gap: Spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
   },
-  centerText: {
-    textAlign: 'center',
+
+  intro: {
+    fontSize: 17,
+    lineHeight: 25,
+    marginBottom: 20,
   },
-  pressed: {
-    opacity: 0.7,
+
+  card: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 15,
+    padding: 12,
+    marginBottom: 20,
   },
-  linkButton: {
-    flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
-    alignItems: 'center',
-  },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
-  },
-  collapsibleContent: {
-    alignItems: 'center',
-  },
-  imageTutorial: {
+
+  image: {
     width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
+    height: 180,
+    borderRadius: 12,
   },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+
+  heading: {
+    fontSize: 21,
+    fontWeight: 'bold',
+    marginTop: 12,
+    marginBottom: 8,
+  },
+
+  text: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+
+  infoBox: {
+    backgroundColor: '#e8f5e9',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 30,
   },
 });
